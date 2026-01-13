@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AGORA EVENTS | Strategic Business Plan 2026</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                }
+            }
+        }
+    </script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* Chart Container Specifics */
+        .chart-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        .dark ::-webkit-scrollbar-track { background: #1c1917; }
+        ::-webkit-scrollbar-thumb { background: #d6d3d1; border-radius: 4px; }
+        .dark ::-webkit-scrollbar-thumb { background: #44403c; }
+
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+
+    <!-- Placeholder Comments Required by Prompt -->
+    <!-- Chosen Palette: Warm Neutrals (Stone) with Emerald Green accents. Dark mode utilizes deep stone/slate tones for professional depth. -->
+    <!-- Application Structure Plan: 1. Navigation with Toggles. 2. Hero with persistent KPIs. 3. Strategy Comparison. 4. Market Context. 5. Interactive Financial Dashboard. 6. Compliance Deep-dive. 7. Footer. -->
+    <!-- Visualization & Content Choices: Doughnut for Revenue, Horizontal Bar for Expenses. Simulator uses reactive JS to scale costs based on guest counts. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="bg-stone-50 dark:bg-stone-950 text-stone-800 dark:text-stone-200 antialiased transition-colors duration-300 selection:bg-emerald-200 dark:selection:bg-emerald-800 selection:text-emerald-900 dark:selection:text-emerald-100">
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-stone-50/90 dark:bg-stone-950/90 backdrop-blur-md border-b border-stone-200 dark:border-stone-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex-shrink-0 flex items-center gap-2">
+                    <span class="text-2xl">🏛️</span>
+                    <span class="font-bold text-xl tracking-tight text-stone-900 dark:text-white">AGORA <span class="text-emerald-600">EVENTS</span></span>
+                </div>
+                
+                <div class="hidden md:flex space-x-6 items-center">
+                    <button onclick="scrollToSection('strategy')" class="nav-item text-stone-600 dark:text-stone-400 hover:text-emerald-600 dark:hover:text-emerald-400 font-medium transition-colors" data-i18n="navStrategy">Strategy</button>
+                    <button onclick="scrollToSection('market')" class="nav-item text-stone-600 dark:text-stone-400 hover:text-emerald-600 dark:hover:text-emerald-400 font-medium transition-colors" data-i18n="navMarket">Market</button>
+                    <button onclick="scrollToSection('financials')" class="nav-item text-stone-600 dark:text-stone-400 hover:text-emerald-600 dark:hover:text-emerald-400 font-medium transition-colors" data-i18n="navFinancials">Financials</button>
+                    
+                    <div class="h-6 w-px bg-stone-200 dark:bg-stone-800 mx-2"></div>
+                    
+                    <!-- Control Toggles -->
+                    <div class="flex items-center gap-4">
+                        <!-- Theme Toggle -->
+                        <button onclick="toggleDarkMode()" class="p-2 rounded-full hover:bg-stone-200 dark:hover:bg-stone-800 transition-colors text-xl" title="Toggle Dark Mode">
+                            <span id="themeIcon">🌓</span>
+                        </button>
+                        <!-- Language Toggle -->
+                        <button onclick="toggleLanguage()" class="flex items-center gap-2 px-3 py-1 rounded-md border border-stone-300 dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors text-sm font-bold uppercase">
+                            <span id="langDisplay">EN</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative pt-16 pb-20 lg:pt-24 lg:pb-28 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-stone-900 dark:text-white tracking-tight mb-6" data-i18n="heroTitle">
+                The Cultural Anchor of <br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500">The Ruhrgebiet</span>
+            </h1>
+            <p class="mt-4 max-w-2xl mx-auto text-xl text-stone-600 dark:text-stone-400" data-i18n="heroSub">
+                An Asset-Light, High-Margin event ecosystem for the 2026 Experience Economy. 
+                Capitalizing on Essen's tax advantages and premium market vacuum.
+            </p>
+            
+            <!-- Quick Stats Grid -->
+            <div class="mt-12 grid grid-cols-2 gap-5 md:grid-cols-4 lg:max-w-4xl lg:mx-auto">
+                <div class="bg-white dark:bg-stone-900 p-6 rounded-xl shadow-sm border border-stone-100 dark:border-stone-800">
+                    <div class="text-3xl font-bold text-emerald-600">36.1%</div>
+                    <div class="text-sm font-medium text-stone-500 mt-1" data-i18n="statMargin">Net Margin</div>
+                </div>
+                <div class="bg-white dark:bg-stone-900 p-6 rounded-xl shadow-sm border border-stone-100 dark:border-stone-800">
+                    <div class="text-3xl font-bold text-stone-800 dark:text-stone-200">581k</div>
+                    <div class="text-sm font-medium text-stone-500 mt-1" data-i18n="statPop">Population (Essen)</div>
+                </div>
+                <div class="bg-white dark:bg-stone-900 p-6 rounded-xl shadow-sm border border-stone-100 dark:border-stone-800">
+                    <div class="text-3xl font-bold text-stone-800 dark:text-stone-200">0%</div>
+                    <div class="text-sm font-medium text-stone-500 mt-1" data-i18n="statTax">Entertainment Tax</div>
+                </div>
+                <div class="bg-white dark:bg-stone-900 p-6 rounded-xl shadow-sm border border-stone-100 dark:border-stone-800">
+                    <div class="text-3xl font-bold text-stone-800 dark:text-stone-200">400%</div>
+                    <div class="text-sm font-medium text-stone-500 mt-1" data-i18n="statMarkup">Bev. Markup</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Strategy Section -->
+    <section id="strategy" class="py-16 bg-white dark:bg-stone-900 border-y border-stone-200 dark:border-stone-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="lg:text-center mb-12">
+                <h2 class="text-base text-emerald-600 font-semibold tracking-wide uppercase" data-i18n="stratLabel">The Pivot</h2>
+                <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-stone-900 dark:text-white sm:text-4xl" data-i18n="stratTitle">
+                    Solving the "Middle-Man" Crisis
+                </p>
+                <p class="mt-4 max-w-2xl text-xl text-stone-500 dark:text-stone-400 lg:mx-auto" data-i18n="stratSub">
+                    The traditional event model is broken. Promoters take the risk while venues take the profit. AGORA flips the script.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- The Problem -->
+                <div class="bg-stone-50 dark:bg-stone-800/50 rounded-2xl p-8 border border-stone-200 dark:border-stone-700 card-hover transition-all">
+                    <div class="flex items-center gap-4 mb-4">
+                        <span class="text-3xl bg-red-100 dark:bg-red-900/30 p-3 rounded-full">📉</span>
+                        <h3 class="text-xl font-bold text-stone-900 dark:text-white" data-i18n="probTitle">The Traditional Trap</h3>
+                    </div>
+                    <ul class="space-y-4 text-stone-600 dark:text-stone-300">
+                        <li class="flex items-start"><span class="mr-2 text-red-500 font-bold">✖</span><span data-i18n="prob1"><strong>Mismatch:</strong> Good sound, bad branding.</span></li>
+                        <li class="flex items-start"><span class="mr-2 text-red-500 font-bold">✖</span><span data-i18n="prob2"><strong>Revenue Loss:</strong> Promoters lose 70% of beverage sales.</span></li>
+                        <li class="flex items-start"><span class="mr-2 text-red-500 font-bold">✖</span><span data-i18n="prob3"><strong>Compliance:</strong> High vulnerability to "Zoll" raids.</span></li>
+                    </ul>
+                </div>
+
+                <!-- The Solution -->
+                <div class="bg-stone-900 dark:bg-emerald-950 rounded-2xl p-8 shadow-xl card-hover transition-all text-white">
+                    <div class="flex items-center gap-4 mb-4">
+                        <span class="text-3xl bg-emerald-900/50 p-3 rounded-full">🚀</span>
+                        <h3 class="text-xl font-bold text-emerald-400" data-i18n="solTitle">The AGORA Model</h3>
+                    </div>
+                    <ul class="space-y-4 text-stone-300">
+                        <li class="flex items-start"><span class="mr-2 text-emerald-400 font-bold">✔</span><span data-i18n="sol1"><strong>"Blank Bar":</strong> We rent the hardware, we own the software.</span></li>
+                        <li class="flex items-start"><span class="mr-2 text-emerald-400 font-bold">✔</span><span data-i18n="sol2"><strong>Inventory:</strong> Capturing 400-600% markup on drinks.</span></li>
+                        <li class="flex items-start"><span class="mr-2 text-emerald-400 font-bold">✔</span><span data-i18n="sol3"><strong>Institutional:</strong> § 34a Security built-in.</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Context -->
+    <section id="market" class="py-16 bg-stone-50 dark:bg-stone-950">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-10">
+                <h2 class="text-3xl font-bold text-stone-900 dark:text-white" data-i18n="mktTitle">Why Essen? Why Now?</h2>
+                <p class="mt-2 text-stone-600 dark:text-stone-400 max-w-3xl" data-i18n="mktSub">
+                    Essen is a strategic asset. The abolition of the <em>Vergnügungsteuer</em> creates an immediate competitive moat.
+                </p>
+            </div>
+
+            <div class="grid lg:grid-cols-3 gap-8">
+                <div class="bg-white dark:bg-stone-900 p-6 rounded-lg border border-stone-200 dark:border-stone-800 shadow-sm">
+                    <div class="text-emerald-600 text-4xl mb-4">📍</div>
+                    <h4 class="font-bold text-lg text-stone-900 dark:text-white" data-i18n="mkt1Title">Tax Advantage</h4>
+                    <p class="text-stone-600 dark:text-stone-400 mt-2 text-sm" data-i18n="mkt1Sub">Essen has abolished entertainment tax for dance events. Yields 15-20% higher net margin than Cologne.</p>
+                </div>
+                <div class="bg-white dark:bg-stone-900 p-6 rounded-lg border border-stone-200 dark:border-stone-800 shadow-sm">
+                    <div class="text-emerald-600 text-4xl mb-4">🎓</div>
+                    <h4 class="font-bold text-lg text-stone-900 dark:text-white" data-i18n="mkt2Title">Student Density</h4>
+                    <p class="text-stone-600 dark:text-stone-400 mt-2 text-sm" data-i18n="mkt2Sub">70,000+ Students in catchment area. A massive, renewable audience for premium nightlife.</p>
+                </div>
+                <div class="bg-white dark:bg-stone-900 p-6 rounded-lg border border-stone-200 dark:border-stone-800 shadow-sm">
+                    <div class="text-emerald-600 text-4xl mb-4">🏭</div>
+                    <h4 class="font-bold text-lg text-stone-900 dark:text-white" data-i18n="mkt3Title">Industrial Canvas</h4>
+                    <p class="text-stone-600 dark:text-stone-400 mt-2 text-sm" data-i18n="mkt3Sub">High availability of "Raw" venues like Zeche Carl, perfect for the "Dry Hire" model.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Financials -->
+    <section id="financials" class="py-16 bg-white dark:bg-stone-900 border-t border-stone-200 dark:border-stone-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="lg:text-center mb-12">
+                <h2 class="text-base text-emerald-600 font-semibold tracking-wide uppercase" data-i18n="finLabel">Financial Architecture</h2>
+                <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-stone-900 dark:text-white" data-i18n="finTitle">The 36% Margin Engine</p>
+                <p class="mt-4 max-w-2xl text-xl text-stone-500 dark:text-stone-400 lg:mx-auto" data-i18n="finSub">Explore unit economics based on a 400-guest pilot.</p>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-12 items-start">
+                <div class="space-y-12">
+                    <div>
+                        <h3 class="text-lg font-bold text-stone-900 dark:text-white mb-4 flex items-center gap-2">
+                            <span>💰</span> <span data-i18n="chartRevTitle">Revenue Breakdown (Gross: €15,500)</span>
+                        </h3>
+                        <div class="chart-wrapper bg-stone-50 dark:bg-stone-800 rounded-xl p-4 border border-stone-100 dark:border-stone-700">
+                            <canvas id="revenueChart"></canvas>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-stone-900 dark:text-white mb-4 flex items-center gap-2">
+                            <span>💸</span> <span data-i18n="chartExpTitle">Operational Expenses (Total: €9,900)</span>
+                        </h3>
+                        <div class="chart-wrapper bg-stone-50 dark:bg-stone-800 rounded-xl p-4 border border-stone-100 dark:border-stone-700">
+                            <canvas id="expenseChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Simulator -->
+                <div class="bg-stone-50 dark:bg-stone-800 p-6 rounded-2xl border border-stone-200 dark:border-stone-700 sticky top-24">
+                    <h3 class="text-xl font-bold text-stone-900 dark:text-white mb-6" data-i18n="simTitle">📈 Profitability Simulator</h3>
+                    <div class="mb-8">
+                        <label for="guestSlider" class="block text-sm font-medium text-stone-700 dark:text-stone-300 mb-2">
+                            <span data-i18n="simGuestLabel">Estimated Guest Count:</span> <span id="guestCountDisplay" class="font-bold text-emerald-600 text-lg">400</span>
+                        </label>
+                        <input type="range" min="200" max="1000" step="50" value="400" id="guestSlider" class="w-full h-2 bg-stone-300 dark:bg-stone-600 rounded-lg appearance-none cursor-pointer accent-emerald-600">
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-4">
+                        <div class="bg-white dark:bg-stone-900 p-4 rounded-lg shadow-sm flex justify-between items-center">
+                            <div class="text-sm text-stone-500 dark:text-stone-400" data-i18n="simRev">Projected Revenue</div>
+                            <div class="text-xl font-bold text-stone-900 dark:text-white" id="simRevenue">€15,500</div>
+                        </div>
+                        <div class="bg-white dark:bg-stone-900 p-4 rounded-lg shadow-sm flex justify-between items-center">
+                            <div class="text-sm text-stone-500 dark:text-stone-400" data-i18n="simExp">Projected Expenses</div>
+                            <div class="text-xl font-bold text-red-500" id="simExpenses">€9,900</div>
+                        </div>
+                        <div class="bg-stone-900 dark:bg-stone-950 p-6 rounded-xl shadow-lg flex justify-between items-center transform scale-105 border border-stone-700">
+                            <div class="text-sm text-stone-300 dark:text-stone-400">NET PROFIT</div>
+                            <div class="text-3xl font-extrabold text-white" id="simProfit">€5,600</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-stone-900 dark:bg-black text-stone-400 py-12 border-t border-stone-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-2xl font-bold text-white mb-4">AGORA EVENTS</h2>
+            <p class="mb-8 max-w-lg mx-auto" data-i18n="footerSub">Asset-Light. High-Margin. Culturally Rooted.</p>
+            <p class="text-xs text-stone-600" data-i18n="copyright">© 2026 AGORA EVENTS UG (haftungsbeschränkt). All data projections are estimates.</p>
+        </div>
+    </footer>
+
+    <!-- JS Logic -->
+    <script>
+        // --- TRANSLATIONS ---
+        const i18n = {
+            en: {
+                navStrategy: "Strategy", navMarket: "Market", navFinancials: "Financials",
+                heroTitle: "The Cultural Anchor of <br> <span class='text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500'>The Ruhrgebiet</span>",
+                heroSub: "An Asset-Light, High-Margin event ecosystem for the 2026 Experience Economy. Capitalizing on Essen's tax advantages and premium market vacuum.",
+                statMargin: "Net Margin", statPop: "Population (Essen)", statTax: "Entertainment Tax", statMarkup: "Bev. Markup",
+                stratLabel: "The Pivot", stratTitle: "Solving the 'Middle-Man' Crisis", stratSub: "The traditional event model is broken. Promoters take the risk while venues take the profit.",
+                probTitle: "The Traditional Trap", prob1: "<strong>Mismatch:</strong> Good sound, bad branding.", prob2: "<strong>Revenue Loss:</strong> Promoters lose 70% of beverage sales.", prob3: "<strong>Compliance:</strong> High vulnerability to 'Zoll' raids.",
+                solTitle: "The AGORA Model", sol1: "<strong>'Blank Bar':</strong> We rent the hardware, we own the software.", sol2: "<strong>Inventory:</strong> Capturing 400-600% markup on drinks.", sol3: "<strong>Institutional:</strong> § 34a Security built-in.",
+                mktTitle: "Why Essen? Why Now?", mktSub: "Essen is a strategic asset. The abolition of the <em>Vergnügungsteuer</em> creates an immediate competitive moat.",
+                mkt1Title: "Tax Advantage", mkt1Sub: "Essen has abolished entertainment tax for dance events. Yields 15-20% higher net margin.",
+                mkt2Title: "Student Density", mkt2Sub: "70,000+ Students in catchment area. A massive, renewable audience.",
+                mkt3Title: "Industrial Canvas", mkt3Sub: "High availability of 'Raw' venues like Zeche Carl, perfect for 'Dry Hire'.",
+                finLabel: "Financial Architecture", finTitle: "The 36% Margin Engine", finSub: "Explore unit economics based on a 400-guest pilot.",
+                chartRevTitle: "Revenue Breakdown (Gross: €15,500)", chartExpTitle: "Operational Expenses (Total: €9,900)",
+                simTitle: "📈 Profitability Simulator", simGuestLabel: "Estimated Guest Count:", simRev: "Projected Revenue", simExp: "Projected Expenses",
+                footerSub: "Asset-Light. High-Margin. Culturally Rooted.",
+                copyright: "© 2026 AGORA EVENTS UG (haftungsbeschränkt). All projections are estimates.",
+                chartLabels: ["Beverage Sales", "Ticket Sales", "Sponsorships"],
+                expLabels: ["Infrastructure", "Marketing", "Inventory (COGS)", "Security", "Staff", "Admin/GEMA"]
+            },
+            de: {
+                navStrategy: "Strategie", navMarket: "Markt", navFinancials: "Finanzen",
+                heroTitle: "Der kulturelle Anker des <br> <span class='text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500'>Ruhrgebiets</span>",
+                heroSub: "Ein Asset-Light, High-Margin Event-Ökosystem für die Experience Economy 2026. Nutzung der Essener Steuervorteile und des Premium-Marktvakuums.",
+                statMargin: "Nettomarge", statPop: "Einwohner (Essen)", statTax: "Vergnügungsteuer", statMarkup: "Getränke-Aufschlag",
+                stratLabel: "Der Wendepunkt", stratTitle: "Lösung der 'Middle-Man' Krise", stratSub: "Das traditionelle Event-Modell ist defekt. Veranstalter tragen das Risiko, Locations den Gewinn.",
+                probTitle: "Die traditionelle Falle", prob1: "<strong>Fehlstellung:</strong> Guter Sound, schlechtes Branding.", prob2: "<strong>Umsatzverlust:</strong> Veranstalter verlieren 70% des Getränkeumsatzes.", prob3: "<strong>Compliance:</strong> Hohe Anfälligkeit für Zoll-Razzien.",
+                solTitle: "Das AGORA Modell", sol1: "<strong>'Blank Bar':</strong> Wir mieten Hardware, wir besitzen die Software.", sol2: "<strong>Inventar:</strong> 400-600% Marge auf Getränke sichern.", sol3: "<strong>Institutionell:</strong> § 34a Sicherheit integriert.",
+                mktTitle: "Warum Essen? Warum jetzt?", mktSub: "Essen ist ein strategisches Asset. Die Abschaffung der <em>Vergnügungsteuer</em> schafft einen Wettbewerbsvorteil.",
+                mkt1Title: "Steuervorteil", mkt1Sub: "Essen hat die Vergnügungsteuer für Tanz-Events abgeschafft. 15-20% höhere Nettomarge.",
+                mkt2Title: "Studentendichte", mkt2Sub: "70.000+ Studenten im Einzugsgebiet. Ein riesiges, erneuerbares Publikum.",
+                mkt3Title: "Industrie-Charme", mkt3Sub: "Hohe Verfügbarkeit von 'Raw'-Locations wie Zeche Carl, ideal für 'Dry Hire'.",
+                finLabel: "Finanz-Architektur", finTitle: "Der 36% Margen-Motor", finSub: "Umsatz-Logik basierend auf einem 400-Gäste-Pilotprojekt.",
+                chartRevTitle: "Umsatzverteilung (Brutto: €15,500)", chartExpTitle: "Betriebskosten (Gesamt: €9,900)",
+                simTitle: "📈 Gewinn-Simulator", simGuestLabel: "Gästeanzahl geschätzt:", simRev: "Projizierter Umsatz", simExp: "Projizierte Kosten",
+                footerSub: "Asset-Light. High-Margin. Kulturell verwurzelt.",
+                copyright: "© 2026 AGORA EVENTS UG (haftungsbeschränkt). Alle Angaben sind Schätzungen.",
+                chartLabels: ["Getränkeumsatz", "Ticketverkauf", "Sponsoring"],
+                expLabels: ["Infrastruktur", "Marketing", "Inventar (COGS)", "Security", "Personal", "Admin/GEMA"]
+            }
+        };
+
+        // --- STATE ---
+        let currentLang = localStorage.getItem('agora_lang') || 'en';
+        let isDarkMode = localStorage.getItem('agora_dark') === 'true';
+
+        // --- THEME LOGIC ---
+        function updateTheme() {
+            if (isDarkMode) {
+                document.documentElement.classList.add('dark');
+                document.getElementById('themeIcon').innerText = '☀️';
+            } else {
+                document.documentElement.classList.remove('dark');
+                document.getElementById('themeIcon').innerText = '🌙';
+            }
+            localStorage.setItem('agora_dark', isDarkMode);
+            updateCharts();
+        }
+
+        function toggleDarkMode() {
+            isDarkMode = !isDarkMode;
+            updateTheme();
+        }
+
+        // --- LANGUAGE LOGIC ---
+        function updateLanguage() {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                el.innerHTML = i18n[currentLang][key];
+            });
+            document.getElementById('langDisplay').innerText = currentLang;
+            localStorage.setItem('agora_lang', currentLang);
+            updateCharts();
+        }
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'de' : 'en';
+            updateLanguage();
+        }
+
+        // --- CHART LOGIC ---
+        let revenueChart, expenseChart;
+        const eventData = {
+            ticketPrice: 15, bevSpend: 20, sponsorRevenue: 1500,
+            fixed: { rent: 2500, marketing: 2000, admin: 700 },
+            variable: { cogsPercent: 0.25, staffPer100: 312.5 }
+        };
+
+        function initCharts() {
+            const isDark = document.documentElement.classList.contains('dark');
+            const textColor = isDark ? '#d6d3d1' : '#57534e';
+            const gridColor = isDark ? '#292524' : '#e7e5e4';
+
+            const revCtx = document.getElementById('revenueChart').getContext('2d');
+            revenueChart = new Chart(revCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: i18n[currentLang].chartLabels,
+                    datasets: [{
+                        data: [8000, 6000, 1500],
+                        backgroundColor: ['#059669', '#57534e', '#d6d3d1'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom', labels: { color: textColor, font: { family: 'Inter' } } } }
+                }
+            });
+
+            const expCtx = document.getElementById('expenseChart').getContext('2d');
+            expenseChart = new Chart(expCtx, {
+                type: 'bar',
+                data: {
+                    labels: i18n[currentLang].expLabels,
+                    datasets: [{
+                        data: [2500, 2000, 2000, 1450, 1250, 700],
+                        backgroundColor: '#a8a29e', borderRadius: 4
+                    }]
+                },
+                options: {
+                    indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+                    scales: {
+                        x: { grid: { color: gridColor }, ticks: { color: textColor } },
+                        y: { grid: { display: false }, ticks: { color: textColor, font: { family: 'Inter' } } }
+                    },
+                    plugins: { legend: { display: false } }
+                }
+            });
+        }
+
+        function updateCharts() {
+            if (!revenueChart) return;
+            const isDark = document.documentElement.classList.contains('dark');
+            const textColor = isDark ? '#d6d3d1' : '#57534e';
+            const gridColor = isDark ? '#292524' : '#e7e5e4';
+
+            // Language
+            revenueChart.data.labels = i18n[currentLang].chartLabels;
+            expenseChart.data.labels = i18n[currentLang].expLabels;
+            
+            // Theme
+            revenueChart.options.plugins.legend.labels.color = textColor;
+            expenseChart.options.scales.x.grid.color = gridColor;
+            expenseChart.options.scales.x.ticks.color = textColor;
+            expenseChart.options.scales.y.ticks.color = textColor;
+
+            revenueChart.update();
+            expenseChart.update();
+        }
+
+        // --- SIMULATOR ---
+        const slider = document.getElementById('guestSlider');
+        slider.addEventListener('input', (e) => {
+            const guests = parseInt(e.target.value);
+            document.getElementById('guestCountDisplay').innerText = guests;
+            
+            const totalRev = (guests * eventData.ticketPrice) + (guests * eventData.bevSpend) + eventData.sponsorRevenue;
+            const cogs = (guests * eventData.bevSpend) * eventData.variable.cogsPercent;
+            const staff = (guests / 100) * eventData.variable.staffPer100;
+            const security = Math.max(3, Math.ceil(guests / 100)) * 360;
+            const totalExp = eventData.fixed.rent + eventData.fixed.marketing + eventData.fixed.admin + security + cogs + staff;
+            const profit = totalRev - totalExp;
+
+            document.getElementById('simRevenue').innerText = formatEuro(totalRev);
+            document.getElementById('simExpenses').innerText = formatEuro(totalExp);
+            document.getElementById('simProfit').innerText = formatEuro(profit);
+            document.getElementById('simProfit').className = profit > 0 ? "text-3xl font-extrabold text-white" : "text-3xl font-extrabold text-red-500";
+        });
+
+        function formatEuro(num) {
+            return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(num);
+        }
+
+        function scrollToSection(id) {
+            const el = document.getElementById(id);
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // --- INIT ---
+        window.onload = () => {
+            updateTheme();
+            updateLanguage();
+            initCharts();
+        };
+    </script>
+</body>
+</html>
