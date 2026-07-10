@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- ===================================================================
+         PERMISSIONS
+         Offline-first. INTERNET is used ONLY for user-configured self-hosted
+         WebDAV backup — no third-party cloud endpoints are contacted.
+         =================================================================== -->
+
+    <!-- Networking (self-hosted WebDAV sync target only) -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!-- Notifications for the "Claim" ritual (Android 13+) -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!-- Screen-time interceptor: read foreground app usage (special access,
+         granted by the user via Settings; also gated by AppOps at runtime). -->
+    <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS"
+        tools:ignore="ProtectedPermissions" />
+
+    <!-- Action Gate overlay drawn over blocked apps -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
+    <!-- Foreground services: interceptor loop + backup pipeline -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+
+    <!-- Re-arm interceptor + reschedule WorkManager jobs after reboot -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <!-- On-device step / activity sensing fallback -->
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
+
+    <!-- ===================================================================
+         HEALTH CONNECT PERMISSIONS
+         Read-only. Feeds the Habit-to-World graphics matrix:
+           steps/exercise -> infrastructure   hydration -> water mechanics
+           sleep -> lighting & fog            mindfulness -> biodiversity
+         =================================================================== -->
+    <uses-permission android:name="android.permission.health.READ_STEPS" />
+    <uses-permission android:name="android.permission.health.READ_EXERCISE" />
+    <uses-permission android:name="android.permission.health.READ_DISTANCE" />
+    <uses-permission android:name="android.permission.health.READ_TOTAL_CALORIES_BURNED" />
+    <uses-permission android:name="android.permission.health.READ_ACTIVE_CALORIES_BURNED" />
+    <uses-permission android:name="android.permission.health.READ_HYDRATION" />
+    <uses-permission android:name="android.permission.health.READ_SLEEP" />
+    <uses-permission android:name="android.permission.health.READ_MINDFULNESS" />
+    <uses-permission android:name="android.permission.health.READ_HEART_RATE" />
+    <!-- Read even while the app is backgrounded, so rewards can be banked
+         for the "Claim" ritual without the app being foregrounded. -->
+    <uses-permission android:name="android.permission.health.READ_HEALTH_DATA_IN_BACKGROUND" />
+
+    <!-- ===================================================================
+         PACKAGE VISIBILITY (Android 11+)
+         The interceptor lists launchable apps for the user to block. We scope
+         visibility to LAUNCHER activities + Health Connect rather than
+         requesting the QUERY_ALL_PACKAGES policy-restricted permission.
+         =================================================================== -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent>
+        <!-- Health Connect data store / rationale routing -->
+        <package android:name="com.google.android.apps.healthdata" />
+        <intent>
+            <action android:name="androidx.health.ACTION_SHOW_PERMISSIONS_RATIONALE" />
+        </intent>
+    </queries>
+
+    <!-- Adaptive-brightness sensor optional; app runs without it. -->
+    <uses-feature android:name="android.hardware.sensor.stepcounter"
+        android:required="false" />
+
+    <application
+        android:name=".HavenApplication"
+        android:allowBackup="false"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Haven.Splash"
+        android:enableOnBackInvokedCallback="true"
+        tools:targetApi="34">
+
+        <!-- =============================================================
+             MAIN ACTIVITY
+             Single-activity Compose host. Orientation unlocked so Ambient
+             Standby Mode can react to locked landscape + charging.
+             ============================================================= -->
+        <activity
+            android:name=".ui.MainActivity"
+            android:exported="true"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|uiMode|density|smallestScreenSize"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.Haven.Splash"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <!-- Health Connect: show the app's rationale when the user taps the
+                 privacy notice in the permission dialog (API 33 and below). -->
+            <intent-filter>
+                <action android:name="androidx.health.ACTION_SHOW_PERMISSIONS_RATIONALE" />
+            </intent-filter>
+        </activity>
+
+        <!-- Health Connect: rationale surface for Android 14+ (permission usage) -->
+        <activity-alias
+            android:name="ViewPermissionUsageActivity"
+            android:exported="true"
+            android:targetActivity=".ui.MainActivity"
+            android:permission="android.permission.START_VIEW_PERMISSION_USAGE">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW_PERMISSION_USAGE" />
+                <category android:name="android.intent.category.HEALTH_PERMISSIONS" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- =============================================================
+             INTERCEPTOR FOREGROUND SERVICE
+             Polls UsageStatsManager for a blocked foreground app and raises
+             the Action Gate overlay. specialUse type = app-usage limiting.
+             ============================================================= -->
+        <service
+            android:name=".intercept.InterceptorService"
+            android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Enforces user-configured screen-time limits by detecting blocked apps in the foreground and presenting an on-device focus interstitial. No data leaves the device." />
+        </service>
+
+        <!-- =============================================================
+             BOOT RECEIVER
+             Re-arms the interceptor and reschedules backup/timelapse work.
+             ============================================================= -->
+        <receiver
+            android:name=".system.BootReceiver"
+            android:exported="false"
+            android:directBootAware="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- =============================================================
+             FILE PROVIDER
+             Exposes encrypted backups (SAF document target / WebDAV staging)
+             and the shareable timelapse MP4 without leaking file:// URIs.
+             ============================================================= -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <!-- =============================================================
+             WORKMANAGER
+             Disable the default initializer; Hilt supplies a custom
+             WorkerFactory via Configuration.Provider in HavenApplication.
+             ============================================================= -->
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="merge">
+            <meta-data
+                android:name="androidx.work.WorkManagerInitializer"
+                android:value="androidx.startup"
+                tools:node="remove" />
+        </provider>
+
+    </application>
+
+</manifest>

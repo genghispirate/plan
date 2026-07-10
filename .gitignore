@@ -1,0 +1,21 @@
+# --- Android / Gradle build artifacts ---
+*.iml
+.gradle/
+/local.properties
+/.idea/
+.DS_Store
+/build
+/app/build
+/captures
+.externalNativeBuild
+.cxx
+*.apk
+*.aab
+*.keystore
+!debug.keystore
+
+# --- Kotlin / KSP ---
+.kotlin/
+
+# --- Backups produced at runtime ---
+/app/schemas/*.tmp
