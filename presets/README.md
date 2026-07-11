@@ -25,13 +25,24 @@ The film presets share the group **"Film Look"**; the portrait preset sits in a
 
 ## 📲 How to install on Lightroom Mobile
 
-**Easiest — import the `.xmp` files directly (free plan works):**
+**Android — import the ZIP (most reliable):**
 
-1. Download the `.xmp` files to your phone (save them to Files / Downloads).
+Android's file picker often hands Lightroom a loose `.xmp` as an unrecognized
+type, causing an **"Unsupported file"** error. Importing the **`.zip`** avoids
+this entirely.
+
+1. Save **`Film-and-Portrait-Presets.zip`** to your phone (e.g. Downloads).
+   Do **not** unzip it.
 2. Open **Lightroom** → open any photo → tap **Edit**.
-3. Tap the **Presets** icon → tap the **`•••`** (three dots, top right) →
-   **Import Presets**.
-4. Select the `.xmp` files. They'll show up under **Presets → Film Look**.
+3. Tap **Presets** → the **`⋮`** (three dots) → **Import Presets**.
+4. Browse to and select the **`.zip`**. All five presets import at once into
+   their **Film Look** / **Portrait** groups.
+
+**iPhone — import the `.xmp` files directly (free plan works):**
+
+1. Save the `.xmp` files to Files.
+2. Lightroom → open a photo → **Edit → Presets → `⋯` → Import Presets**.
+3. Select the `.xmp` files (or the `.zip`).
 
 **Alternative — sync from desktop:** drop the files into Lightroom CC on
 desktop (File → Import Profiles & Presets), and they sync to mobile
