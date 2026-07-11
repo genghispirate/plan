@@ -4,7 +4,7 @@
     xmlns:crs="http://ns.adobe.com/camera-raw-settings/1.0/"
    crs:PresetType="Normal"
    crs:Cluster=""
-   crs:UUID="EDED233BA6C64A008F17921D72D01892"
+   crs:UUID="AE19B691438D4CC7A030A7D0BD3ABC39"
    crs:SupportsAmount="False"
    crs:SupportsColor="True"
    crs:SupportsMonochrome="True"
@@ -18,20 +18,18 @@
    crs:ContactInfo=""
    crs:Version="15.4"
    crs:ProcessVersion="11.0"
-   crs:Treatment="Black &amp; White"
-   crs:ConvertToGrayscale="True"
-   crs:WhiteBalance="As Shot"
-   crs:IncrementalTemperature="0"
-   crs:IncrementalTint="0"
+   crs:WhiteBalance="Custom"
+   crs:IncrementalTemperature="+8"
+   crs:IncrementalTint="+4"
    crs:Exposure2012="0.00"
-   crs:Contrast2012="+15"
-   crs:Highlights2012="-15"
+   crs:Contrast2012="+12"
+   crs:Highlights2012="-35"
    crs:Shadows2012="+20"
-   crs:Whites2012="-5"
-   crs:Blacks2012="+6"
+   crs:Whites2012="+10"
+   crs:Blacks2012="-12"
    crs:Texture="+10"
-   crs:Clarity2012="+6"
-   crs:Dehaze="+4"
+   crs:Clarity2012="+10"
+   crs:Dehaze="+5"
    crs:Vibrance="0"
    crs:Saturation="0"
    crs:ParametricShadows="0"
@@ -45,7 +43,7 @@
    crs:SharpenRadius="+1.0"
    crs:SharpenDetail="25"
    crs:SharpenEdgeMasking="0"
-   crs:LuminanceSmoothing="0"
+   crs:LuminanceSmoothing="18"
    crs:LuminanceNoiseReductionDetail="50"
    crs:LuminanceNoiseReductionContrast="0"
    crs:ColorNoiseReduction="25"
@@ -59,26 +57,26 @@
    crs:HueAdjustmentBlue="0"
    crs:HueAdjustmentPurple="0"
    crs:HueAdjustmentMagenta="0"
-   crs:SaturationAdjustmentRed="0"
-   crs:SaturationAdjustmentOrange="0"
+   crs:SaturationAdjustmentRed="-5"
+   crs:SaturationAdjustmentOrange="-8"
    crs:SaturationAdjustmentYellow="0"
    crs:SaturationAdjustmentGreen="0"
    crs:SaturationAdjustmentAqua="0"
    crs:SaturationAdjustmentBlue="0"
    crs:SaturationAdjustmentPurple="0"
    crs:SaturationAdjustmentMagenta="0"
-   crs:LuminanceAdjustmentRed="0"
-   crs:LuminanceAdjustmentOrange="0"
+   crs:LuminanceAdjustmentRed="+5"
+   crs:LuminanceAdjustmentOrange="+12"
    crs:LuminanceAdjustmentYellow="0"
    crs:LuminanceAdjustmentGreen="0"
    crs:LuminanceAdjustmentAqua="0"
    crs:LuminanceAdjustmentBlue="0"
    crs:LuminanceAdjustmentPurple="0"
    crs:LuminanceAdjustmentMagenta="0"
-   crs:SplitToningShadowHue="0"
-   crs:SplitToningShadowSaturation="0"
-   crs:SplitToningHighlightHue="0"
-   crs:SplitToningHighlightSaturation="0"
+   crs:SplitToningShadowHue="210"
+   crs:SplitToningShadowSaturation="8"
+   crs:SplitToningHighlightHue="40"
+   crs:SplitToningHighlightSaturation="6"
    crs:SplitToningBalance="0"
    crs:ColorGradeMidtoneHue="0"
    crs:ColorGradeMidtoneSat="0"
@@ -91,32 +89,18 @@
    crs:ColorGradeGlobalLum="0"
    crs:AutoLateralCA="0"
    crs:LensProfileEnable="0"
-   crs:PostCropVignetteAmount="-10"
-   crs:GrainAmount="28"
-   crs:ToneCurveName2012="Custom"
-   crs:GrainSize="25"
-   crs:GrainFrequency="55"
-   crs:PostCropVignetteMidpoint="50"
-   crs:PostCropVignetteFeather="60"
-   crs:PostCropVignetteRoundness="0"
-   crs:PostCropVignetteStyle="1"
-   crs:GrayMixerRed="+20"
-   crs:GrayMixerOrange="+25"
-   crs:GrayMixerYellow="+20"
-   crs:GrayMixerGreen="-10"
-   crs:GrayMixerAqua="-15"
-   crs:GrayMixerBlue="-25"
-   crs:GrayMixerPurple="-10"
-   crs:GrayMixerMagenta="0"
+   crs:PostCropVignetteAmount="0"
+   crs:GrainAmount="0"
+   crs:ToneCurveName2012="Linear"
    crs:HasSettings="True">
    <crs:Name>
     <rdf:Alt>
-     <rdf:li xml:lang="x-default">Film - B&amp;W Classic</rdf:li>
+     <rdf:li xml:lang="x-default">Portrait - Mediterranean Man</rdf:li>
     </rdf:Alt>
    </crs:Name>
    <crs:ShortName>
     <rdf:Alt>
-     <rdf:li xml:lang="x-default">B&amp;W Classic</rdf:li>
+     <rdf:li xml:lang="x-default">Med Portrait</rdf:li>
     </rdf:Alt>
    </crs:ShortName>
    <crs:SortName>
@@ -126,23 +110,14 @@
    </crs:SortName>
    <crs:Group>
     <rdf:Alt>
-     <rdf:li xml:lang="x-default">Film Look</rdf:li>
+     <rdf:li xml:lang="x-default">Portrait</rdf:li>
     </rdf:Alt>
    </crs:Group>
    <crs:Description>
     <rdf:Alt>
-     <rdf:li xml:lang="x-default">Classic Tri-X style black &amp; white: rich contrast, bright skin, dark skies, punchy grain.</rdf:li>
+     <rdf:li xml:lang="x-default">Flatters olive/Mediterranean warm-undertone skin, a bald head and dark beard: natural warmth, tamed head highlights, brighter eye area, and jaw/beard definition.</rdf:li>
     </rdf:Alt>
    </crs:Description>
-   <crs:ToneCurvePV2012>
-    <rdf:Seq>
-     <rdf:li>0, 14</rdf:li>
-     <rdf:li>64, 54</rdf:li>
-     <rdf:li>128, 130</rdf:li>
-     <rdf:li>192, 204</rdf:li>
-     <rdf:li>255, 248</rdf:li>
-    </rdf:Seq>
-   </crs:ToneCurvePV2012>
   </rdf:Description>
  </rdf:RDF>
 </x:xmpmeta>

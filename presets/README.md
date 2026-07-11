@@ -5,15 +5,21 @@ A small collection of `.xmp` presets that emulate classic film stocks — lifted
 real grain. They work in **Lightroom Mobile (iOS/Android)**, Lightroom CC
 desktop, and Lightroom Classic.
 
-| File | Preset name | Best for |
-|------|-------------|----------|
-| `01-Film-Portra-Warm.xmp` | **Film – Portra Warm** | Everyday, portraits, skin tones (Kodak Portra vibe) |
-| `02-Film-Cinematic-Teal-Orange.xmp` | **Film – Cinematic Teal & Orange** | Moody portraits, street, **video** |
-| `03-Film-Faded-Matte.xmp` | **Film – Faded Matte** | Travel, lifestyle, golden hour, dreamy pastels |
-| `04-Film-BW-Classic.xmp` | **Film – B&W Classic** | Black & white, high-contrast Tri-X style |
+| File | Preset name | Group | Best for |
+|------|-------------|-------|----------|
+| `00-Portrait-Mediterranean-Man.xmp` | **Portrait – Mediterranean Man** | Portrait | Olive/warm skin, bald head, dark beard |
+| `01-Film-Portra-Warm.xmp` | **Film – Portra Warm** | Film Look | Everyday, portraits, skin tones (Kodak Portra vibe) |
+| `02-Film-Cinematic-Teal-Orange.xmp` | **Film – Cinematic Teal & Orange** | Film Look | Moody portraits, street, **video** |
+| `03-Film-Faded-Matte.xmp` | **Film – Faded Matte** | Film Look | Travel, lifestyle, golden hour, dreamy pastels |
+| `04-Film-BW-Classic.xmp` | **Film – B&W Classic** | Film Look | Black & white, high-contrast Tri-X style |
 
-All four share the group name **"Film Look"**, so they'll appear together in
-Lightroom's preset panel.
+The film presets share the group **"Film Look"**; the portrait preset sits in a
+**"Portrait"** group. They'll appear grouped in Lightroom's preset panel.
+
+> **File format note:** these are built to match a real Adobe-exported preset
+> exactly — `crs:ProcessVersion="11.0"`, `crs:SupportsAmount="False"`, and the
+> full `crs:` default attribute set — so they import cleanly into Lightroom
+> Classic, Lightroom CC, and Lightroom Mobile without the "invalid preset" error.
 
 ---
 
@@ -58,6 +64,38 @@ For a consistent clip, apply it to the first frame and, if the app offers it,
 
 If you'd rather build the look yourself, here are the values. Panels follow the
 Lightroom Mobile edit order.
+
+### 00 · Portrait – Mediterranean Man
+
+Tuned for a man with olive/Mediterranean warm-undertone skin, a shaved/bald head
+that catches light, dark beard, and hooded eyes. Warms skin naturally, tames head
+highlights, opens the eye area, and adds jaw/beard definition.
+
+| Panel | Setting | Value |
+|-------|---------|-------|
+| **White Balance** | Temp / Tint | +8 / +4 (relative) |
+| **Light** | Exposure | 0 |
+| | Contrast | +12 |
+| | Highlights | −35 |
+| | Shadows | +20 |
+| | Whites | +10 |
+| | Blacks | −12 |
+| **Effects** | Texture | +10 |
+| | Clarity | +10 |
+| | Dehaze | +5 |
+| **Color → Mix (HSL)** | Orange lum / sat | +12 / −8 |
+| | Red lum / sat | +5 / −5 |
+| **Color Grading** | Shadows | Hue 210, Sat 8 |
+| | Highlights | Hue 40, Sat 6 |
+| | Blending / Balance | 50 / 0 |
+| **Detail** | Sharpening | 40 |
+| | Noise Reduction (Luminance) | 18 |
+
+*Why these work:* Highlights −35 with Whites +10 tames the shiny scalp without
+dulling the image; Orange luminance +12 / saturation −8 brightens and de-oranges
+skin; the teal-blue shadow / warm-orange highlight split adds subtle depth and
+warmth; Texture + Clarity +10 sharpen the beard and jawline; and the WB nudge
+adds a natural Mediterranean warmth.
 
 ### 01 · Film – Portra Warm
 
