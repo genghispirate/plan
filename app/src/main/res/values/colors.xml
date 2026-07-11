@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="parchment">#FFF4EFE6</color>
+    <color name="obsidian">#FF0E1116</color>
+    <color name="walnut">#FF4A3524</color>
+    <color name="walnut_light">#FF6B4E34</color>
+    <color name="brass">#FFCBA36A</color>
+    <!-- Adapts light/dark via values-night. Drives splash + windowBackground. -->
+    <color name="splash_background">#FFF4EFE6</color>
+</resources>
