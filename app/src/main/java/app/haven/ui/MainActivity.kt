@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import app.haven.ui.home.HomeScreen
 import app.haven.ui.theme.HavenTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -20,7 +19,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             HavenTheme {
-                HomeScreen()
+                HavenRoot()
             }
         }
     }
