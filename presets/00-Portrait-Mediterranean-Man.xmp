@@ -4,7 +4,7 @@
     xmlns:crs="http://ns.adobe.com/camera-raw-settings/1.0/"
    crs:PresetType="Normal"
    crs:Cluster=""
-   crs:UUID="AE19B691438D4CC7A030A7D0BD3ABC39"
+   crs:UUID="DA3CF01AA0C543D081F8B7B53E1E5B14"
    crs:SupportsAmount="False"
    crs:SupportsColor="True"
    crs:SupportsMonochrome="True"
@@ -89,8 +89,22 @@
    crs:ColorGradeGlobalLum="0"
    crs:AutoLateralCA="0"
    crs:LensProfileEnable="0"
+   crs:DefringePurpleAmount="0"
+   crs:DefringePurpleHueLo="30"
+   crs:DefringePurpleHueHi="70"
+   crs:DefringeGreenAmount="0"
+   crs:DefringeGreenHueLo="40"
+   crs:DefringeGreenHueHi="60"
    crs:PostCropVignetteAmount="0"
    crs:GrainAmount="0"
+   crs:ShadowTint="0"
+   crs:RedHue="0"
+   crs:RedSaturation="0"
+   crs:GreenHue="0"
+   crs:GreenSaturation="0"
+   crs:BlueHue="0"
+   crs:BlueSaturation="0"
+   crs:OverrideLookVignette="False"
    crs:ToneCurveName2012="Linear"
    crs:HasSettings="True">
    <crs:Name>
@@ -118,6 +132,22 @@
      <rdf:li xml:lang="x-default">Flatters olive/Mediterranean warm-undertone skin, a bald head and dark beard: natural warmth, tamed head highlights, brighter eye area, and jaw/beard definition.</rdf:li>
     </rdf:Alt>
    </crs:Description>
+   <crs:Look>
+    <rdf:Description
+     crs:Name="Adobe Color"
+     crs:Amount="1"
+     crs:UUID="B952C231111CD8E0ECCF14B86BAA7077"
+     crs:SupportsAmount="false"
+     crs:SupportsMonochrome="false"
+     crs:SupportsOutputReferred="false"
+     crs:Stubbed="true">
+    <crs:Group>
+     <rdf:Alt>
+      <rdf:li xml:lang="x-default">Profiles</rdf:li>
+     </rdf:Alt>
+    </crs:Group>
+    </rdf:Description>
+   </crs:Look>
   </rdf:Description>
  </rdf:RDF>
 </x:xmpmeta>

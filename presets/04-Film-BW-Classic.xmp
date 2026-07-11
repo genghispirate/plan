@@ -4,7 +4,7 @@
     xmlns:crs="http://ns.adobe.com/camera-raw-settings/1.0/"
    crs:PresetType="Normal"
    crs:Cluster=""
-   crs:UUID="EDED233BA6C64A008F17921D72D01892"
+   crs:UUID="2508A8760E4F43258AF2590C141873AC"
    crs:SupportsAmount="False"
    crs:SupportsColor="True"
    crs:SupportsMonochrome="True"
@@ -91,8 +91,22 @@
    crs:ColorGradeGlobalLum="0"
    crs:AutoLateralCA="0"
    crs:LensProfileEnable="0"
+   crs:DefringePurpleAmount="0"
+   crs:DefringePurpleHueLo="30"
+   crs:DefringePurpleHueHi="70"
+   crs:DefringeGreenAmount="0"
+   crs:DefringeGreenHueLo="40"
+   crs:DefringeGreenHueHi="60"
    crs:PostCropVignetteAmount="-10"
    crs:GrainAmount="28"
+   crs:ShadowTint="0"
+   crs:RedHue="0"
+   crs:RedSaturation="0"
+   crs:GreenHue="0"
+   crs:GreenSaturation="0"
+   crs:BlueHue="0"
+   crs:BlueSaturation="0"
+   crs:OverrideLookVignette="False"
    crs:ToneCurveName2012="Custom"
    crs:GrainSize="25"
    crs:GrainFrequency="55"
@@ -143,6 +157,22 @@
      <rdf:li>255, 248</rdf:li>
     </rdf:Seq>
    </crs:ToneCurvePV2012>
+   <crs:Look>
+    <rdf:Description
+     crs:Name="Adobe Color"
+     crs:Amount="1"
+     crs:UUID="B952C231111CD8E0ECCF14B86BAA7077"
+     crs:SupportsAmount="false"
+     crs:SupportsMonochrome="false"
+     crs:SupportsOutputReferred="false"
+     crs:Stubbed="true">
+    <crs:Group>
+     <rdf:Alt>
+      <rdf:li xml:lang="x-default">Profiles</rdf:li>
+     </rdf:Alt>
+    </crs:Group>
+    </rdf:Description>
+   </crs:Look>
   </rdf:Description>
  </rdf:RDF>
 </x:xmpmeta>
