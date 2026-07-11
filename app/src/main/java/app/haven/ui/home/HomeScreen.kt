@@ -7,17 +7,16 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,8 +28,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.haven.ui.diorama.DioramaFrame
 import app.haven.ui.diorama.DioramaPlaceholder
+import app.haven.ui.render.DioramaCanvas
+import app.haven.ui.render.rememberAmbientStandby
 import app.haven.ui.theme.Haven
 import app.haven.ui.theme.HavenDimens
 import app.haven.ui.zen.chromeAlpha
@@ -38,19 +41,26 @@ import app.haven.ui.zen.rememberZenModeState
 import app.haven.ui.zen.zenInteraction
 
 /**
- * The root home layout from Section 4: a framed diorama viewport occupying 45%
- * of the height above a 55% interface panel. The Haven Coin indicator floats in
- * the top corner of the frame; the Growth Points gauge lives in the bottom
- * utility sheet. Both, along with the panel, fade under Zen Mode — the diorama
- * itself never fades.
- *
- * Content here is structural: sample metrics and placeholder cards. Live
- * economy wiring and the real render canvas arrive in later steps.
+ * The root home layout (Section 4): a framed diorama viewport over an interface
+ * panel, 45 / 55. The live world drives the render Canvas; the two economy
+ * metrics sit in the coin chip and growth gauge. Chrome fades under Zen Mode,
+ * and Ambient Standby (landscape + charging) hides the panel entirely and lets
+ * the diorama fill the screen edge-to-edge with a sky clock.
  */
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
+fun HomeScreen(
+    modifier: Modifier = Modifier,
+    viewModel: HomeViewModel = hiltViewModel(),
+) {
+    val world by viewModel.world.collectAsStateWithLifecycle()
+    val growthPoints by viewModel.growthPoints.collectAsStateWithLifecycle()
+    val havenCoins by viewModel.havenCoins.collectAsStateWithLifecycle()
+
+    val standby = rememberAmbientStandby()
     val zen = rememberZenModeState()
-    val chromeAlpha by zen.chromeAlpha()
+    val zenAlpha by zen.chromeAlpha()
+    // Standby fully hides chrome; otherwise Zen Mode drives the fade.
+    val chromeAlpha = if (standby) 0f else zenAlpha
 
     Box(
         modifier = modifier
@@ -61,36 +71,49 @@ fun HomeScreen(modifier: Modifier = Modifier) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .windowInsetsPadding(WindowInsets.safeDrawing)
-                .padding(HavenDimens.ScreenPadding),
+                .then(if (standby) Modifier else Modifier.windowInsetsPadding(WindowInsets.safeDrawing))
+                .padding(if (standby) 0.dp else HavenDimens.ScreenPadding),
         ) {
-            // ---- Diorama viewport (45%) ----
+            // ---- Diorama viewport (45%, or full-bleed in standby) ----
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(HavenDimens.ViewportWeight),
+                    .weight(if (standby) 1f else HavenDimens.ViewportWeight),
             ) {
-                DioramaFrame(modifier = Modifier.fillMaxSize()) {
-                    DioramaPlaceholder()
+                val dioramaContent: @Composable () -> Unit = {
+                    val w = world
+                    if (w != null) {
+                        DioramaCanvas(world = w, standby = standby, modifier = Modifier.fillMaxSize())
+                    } else {
+                        DioramaPlaceholder()
+                    }
                 }
-                HavenCoinIndicator(
-                    modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .padding(HavenDimens.FrameThickness + 6.dp)
-                        .alpha(chromeAlpha),
-                    coins = SAMPLE_HAVEN_COINS,
-                )
+
+                if (standby) {
+                    // Edge-to-edge, no frame.
+                    dioramaContent()
+                } else {
+                    DioramaFrame(modifier = Modifier.fillMaxSize()) { dioramaContent() }
+                    HavenCoinIndicator(
+                        coins = havenCoins,
+                        modifier = Modifier
+                            .align(Alignment.TopEnd)
+                            .padding(HavenDimens.FrameThickness + 6.dp)
+                            .alpha(chromeAlpha),
+                    )
+                }
             }
 
-            Spacer(Modifier.height(HavenDimens.CardSpacing))
-
-            // ---- Interface panel (55%) ----
-            InterfacePanel(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(HavenDimens.PanelWeight)
-                    .alpha(chromeAlpha),
-            )
+            if (!standby) {
+                Spacer(Modifier.height(HavenDimens.CardSpacing))
+                InterfacePanel(
+                    growthPoints = growthPoints,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(HavenDimens.PanelWeight)
+                        .alpha(chromeAlpha),
+                )
+            }
         }
     }
 }
@@ -125,7 +148,7 @@ private fun HavenCoinIndicator(coins: Long, modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun InterfacePanel(modifier: Modifier = Modifier) {
+private fun InterfacePanel(growthPoints: Long, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(HavenDimens.CardSpacing),
@@ -162,8 +185,7 @@ private fun InterfacePanel(modifier: Modifier = Modifier) {
 
         Spacer(Modifier.weight(1f))
 
-        // ---- Bottom utility sheet: Growth Points gauge ----
-        GrowthPointsGauge(points = SAMPLE_GROWTH_POINTS)
+        GrowthPointsGauge(points = growthPoints)
     }
 }
 
@@ -214,6 +236,3 @@ private fun GrowthPointsGauge(points: Long, modifier: Modifier = Modifier) {
         )
     }
 }
-
-private const val SAMPLE_HAVEN_COINS = 128L
-private const val SAMPLE_GROWTH_POINTS = 2_450L
