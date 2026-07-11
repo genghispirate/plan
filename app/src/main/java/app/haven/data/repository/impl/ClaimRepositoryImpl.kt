@@ -66,9 +66,11 @@ class ClaimRepositoryImpl(
 
             claimDao.updateStatus(claimId, ClaimStatus.CLAIMED, now)
             ClaimOutcome(
+                category = claim.category,
+                claimedGrowthPoints = claim.growthPoints,
+                claimedHavenCoins = claim.havenCoins,
                 growthPointsAfter = gpAfter,
                 havenCoinsAfter = hcAfter,
-                category = claim.category,
             )
         }
     }

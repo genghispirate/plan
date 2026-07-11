@@ -73,9 +73,13 @@ interface ClaimRepository {
 }
 
 data class ClaimOutcome(
+    val category: HabitCategory,
+    /** Reward deltas that were just applied (drive world evolution). */
+    val claimedGrowthPoints: Long,
+    val claimedHavenCoins: Long,
+    /** Resulting ledger balances after applying the claim. */
     val growthPointsAfter: Long,
     val havenCoinsAfter: Long,
-    val category: HabitCategory,
 )
 
 /** The two-metric economy ledger (append-only). */

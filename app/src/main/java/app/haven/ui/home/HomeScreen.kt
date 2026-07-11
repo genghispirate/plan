@@ -30,6 +30,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import app.haven.data.local.entity.PendingClaimEntity
+import app.haven.ui.claim.ClaimCard
 import app.haven.ui.diorama.DioramaFrame
 import app.haven.ui.diorama.DioramaPlaceholder
 import app.haven.ui.render.DioramaCanvas
@@ -55,6 +57,7 @@ fun HomeScreen(
     val world by viewModel.world.collectAsStateWithLifecycle()
     val growthPoints by viewModel.growthPoints.collectAsStateWithLifecycle()
     val havenCoins by viewModel.havenCoins.collectAsStateWithLifecycle()
+    val pendingClaims by viewModel.pendingClaims.collectAsStateWithLifecycle()
 
     val standby = rememberAmbientStandby()
     val zen = rememberZenModeState()
@@ -108,6 +111,8 @@ fun HomeScreen(
                 Spacer(Modifier.height(HavenDimens.CardSpacing))
                 InterfacePanel(
                     growthPoints = growthPoints,
+                    pendingClaims = pendingClaims,
+                    onClaim = viewModel::onClaim,
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(HavenDimens.PanelWeight)
@@ -148,7 +153,12 @@ private fun HavenCoinIndicator(coins: Long, modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun InterfacePanel(growthPoints: Long, modifier: Modifier = Modifier) {
+private fun InterfacePanel(
+    growthPoints: Long,
+    pendingClaims: List<PendingClaimEntity>,
+    onClaim: (Long) -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(HavenDimens.CardSpacing),
@@ -158,6 +168,11 @@ private fun InterfacePanel(growthPoints: Long, modifier: Modifier = Modifier) {
             style = MaterialTheme.typography.headlineMedium,
             color = MaterialTheme.colorScheme.onBackground,
         )
+
+        // Banked rewards awaiting the deliberate Claim ritual.
+        pendingClaims.forEach { claim ->
+            ClaimCard(claim = claim, onClaim = onClaim)
+        }
 
         FrostedCard {
             Column {
