@@ -31,9 +31,12 @@ class SafBackupTargetImpl(
                 dir.findFile(archive.fileName)?.delete()
                 val doc = dir.createFile(MIME_HAVEN, archive.fileName)
                     ?: error("Could not create SAF document ${archive.fileName}")
-                context.contentResolver.openOutputStream(doc.uri)?.use { out ->
-                    File(archive.localPath).inputStream().use { it.copyTo(out) }
-                } ?: error("Could not open SAF output stream")
+                val out = context.contentResolver.openOutputStream(doc.uri)
+                    ?: error("Could not open SAF output stream")
+                out.use { stream ->
+                    File(archive.localPath).inputStream().use { it.copyTo(stream) }
+                }
+                Unit
             }
         }
 
