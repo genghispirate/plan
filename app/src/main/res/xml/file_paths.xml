@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- FileProvider roots. Backups live in internal encrypted storage; the
+     timelapse MP4 is shared from cache. Nothing is world-readable. -->
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+    <files-path
+        name="haven_backups"
+        path="backups/" />
+    <cache-path
+        name="haven_timelapse"
+        path="timelapse/" />
+</paths>

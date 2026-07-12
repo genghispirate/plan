@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Brass "hearth & sprout" mark, kept within the 66dp adaptive-icon safe zone.
+     Placeholder brand identity for the foundation; refine as design matures. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Roof -->
+    <path
+        android:fillColor="#E4C784"
+        android:pathData="M54,32 L80,54 L28,54 Z" />
+    <!-- House body -->
+    <path
+        android:fillColor="#CBA36A"
+        android:pathData="M35,54 h38 v24 h-38 z" />
+    <!-- Doorway -->
+    <path
+        android:fillColor="#3A2817"
+        android:pathData="M50,62 h8 v16 h-8 z" />
+    <!-- Sprout leaf rising beside the hearth -->
+    <path
+        android:fillColor="#5E8B6A"
+        android:pathData="M54,32 C54,24 60,20 66,20 C66,28 60,32 54,32 Z" />
+</vector>
