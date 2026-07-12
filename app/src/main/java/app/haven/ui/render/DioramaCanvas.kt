@@ -20,9 +20,13 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.unit.dp
+import app.haven.data.world.AestheticChoices
 import app.haven.data.world.DayPhase
+import app.haven.data.world.PathLayoutStyle
 import app.haven.data.world.WorldState
 import app.haven.ui.render.layers.RenderPalette
+import app.haven.ui.render.layers.hearthStoneColor
+import app.haven.ui.render.layers.hearthWoodColor
 import app.haven.ui.render.layers.drawFireflies
 import app.haven.ui.render.layers.drawFog
 import app.haven.ui.render.layers.drawRain
@@ -57,7 +61,9 @@ fun DioramaCanvas(
 ) {
     val density = LocalDensity.current
     val extended = Haven.colors
-    val palette = remember(extended, world.dayPhase) { buildPalette(extended, world.dayPhase) }
+    val palette = remember(extended, world.dayPhase, world.aesthetics) {
+        buildPalette(extended, world.dayPhase, world.aesthetics)
+    }
 
     val render = rememberDioramaRenderState()
     val camera = remember { DioramaCamera() }
@@ -116,7 +122,12 @@ fun DioramaCanvas(
         )
 
         drawSky(palette)
-        drawTerrain(currentWorld, proj, palette)
+        drawTerrain(
+            currentWorld,
+            proj,
+            palette,
+            currentWorld.aesthetics.pathLayout ?: PathLayoutStyle.GEOMETRIC,
+        )
         drawWater(currentWorld, proj, palette, render.elapsedSeconds)
         drawStructures(currentWorld, proj, palette, camera.focusedId, camera.roofAlpha.value)
         drawFireflies(render.fireflies, palette)
@@ -133,8 +144,12 @@ fun DioramaCanvas(
 private val CLOCK_FORMAT: DateTimeFormatter = DateTimeFormatter.ofPattern("h:mm")
 private val CLOCK_COLOR = Color(0xF2FFFFFF)
 
-/** Resolves the environmental palette for a circadian phase. */
-private fun buildPalette(extended: HavenExtendedColors, phase: DayPhase): RenderPalette {
+/** Resolves the environmental palette for a circadian phase + founding choices. */
+private fun buildPalette(
+    extended: HavenExtendedColors,
+    phase: DayPhase,
+    aesthetics: AestheticChoices,
+): RenderPalette {
     val (skyTop, skyBottom) = skyColorsFor(phase, extended)
     return RenderPalette(
         skyTop = skyTop,
@@ -145,6 +160,8 @@ private fun buildPalette(extended: HavenExtendedColors, phase: DayPhase): Render
         waterHighlight = Color(0xFFBFE6F2),
         wall = Color(0xFFD8C5A8),
         roof = Color(0xFF7A4A32),
+        hearthWood = hearthWoodColor(aesthetics.hearthWoodGrain),
+        hearthStone = hearthStoneColor(aesthetics.hearthStonework),
         libraryWall = Color(0xFFE8DFC8),
         libraryRoof = extended.frameOuter,
         trunk = Color(0xFF5A3B24),

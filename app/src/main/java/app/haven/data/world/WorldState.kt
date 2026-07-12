@@ -47,6 +47,10 @@ data class WorldState(
         /** Increment on any breaking change to the serialized shape. */
         const val CURRENT_SCHEMA_VERSION: Int = 1
 
+        /** Stable id of the founding hearth dwelling that wears the onboarding
+         *  wood-grain & stonework choices. */
+        const val HEARTH_DWELLING_ID: String = "dwelling-hearth"
+
         /**
          * A pristine starting world: a single canvas tent, one villager, a muddy
          * hole, fully shrouded fog. Everything else emerges through real habits.
@@ -63,14 +67,14 @@ data class WorldState(
             residential = Residential(
                 dwellings = listOf(
                     Dwelling(
-                        id = "dwelling-hearth",
+                        id = HEARTH_DWELLING_ID,
                         at = GridCoordinate(0f, 0f),
                         tier = DwellingTier.CANVAS_TENT,
                         occupantIds = listOf("villager-founder"),
                     ),
                 ),
                 villagers = listOf(
-                    Villager(id = "villager-founder", homeDwellingId = "dwelling-hearth"),
+                    Villager(id = "villager-founder", homeDwellingId = HEARTH_DWELLING_ID),
                 ),
             ),
             water = WaterSystem(

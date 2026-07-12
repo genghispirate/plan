@@ -11,6 +11,9 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.nativeCanvas
 import app.haven.data.world.DwellingTier
+import app.haven.data.world.HearthStonework
+import app.haven.data.world.HearthWoodGrain
+import app.haven.data.world.PathLayoutStyle
 import app.haven.data.world.PathSurface
 import app.haven.data.world.WaterFeatureType
 import app.haven.data.world.WorldState
@@ -30,6 +33,9 @@ data class RenderPalette(
     val waterHighlight: Color,
     val wall: Color,
     val roof: Color,
+    // Founding choices (Section 1.3) applied to the central hearth dwelling.
+    val hearthWood: Color,
+    val hearthStone: Color,
     val libraryWall: Color,
     val libraryRoof: Color,
     val trunk: Color,
@@ -48,6 +54,23 @@ fun pathColor(surface: PathSurface, p: RenderPalette): Color = when (surface) {
     PathSurface.FLAGSTONE -> Color(0xFFB9B3A6)
 }
 
+/** Resolves the permanent hearth wood-grain choice to a wall color. */
+fun hearthWoodColor(grain: HearthWoodGrain?): Color = when (grain) {
+    HearthWoodGrain.WALNUT -> Color(0xFF4A3524)
+    HearthWoodGrain.OAK -> Color(0xFFB08D57)
+    HearthWoodGrain.ASH -> Color(0xFFD9CBB2)
+    HearthWoodGrain.EBONY -> Color(0xFF2A211B)
+    null -> Color(0xFFB08D57) // oak default before the choice is made
+}
+
+/** Resolves the permanent hearthstone choice to a roof/plinth color. */
+fun hearthStoneColor(stone: HearthStonework?): Color = when (stone) {
+    HearthStonework.RIVER_STONE -> Color(0xFF8A94A6)
+    HearthStonework.SLATE -> Color(0xFF3A4552)
+    HearthStonework.TERRACOTTA -> Color(0xFFC06E52)
+    null -> Color(0xFF7A4A32) // default roof before the choice is made
+}
+
 // ---------------------------------------------------------------------------
 //  SKY
 // ---------------------------------------------------------------------------
@@ -60,21 +83,70 @@ fun DrawScope.drawSky(p: RenderPalette) {
 //  TERRAIN — ground diamond, then paths on top.
 // ---------------------------------------------------------------------------
 
-fun DrawScope.drawTerrain(world: WorldState, proj: IsoProjection, p: RenderPalette) {
+fun DrawScope.drawTerrain(
+    world: WorldState,
+    proj: IsoProjection,
+    p: RenderPalette,
+    pathStyle: PathLayoutStyle,
+) {
     val ground = diamondPath(proj, -5f, -5f, 8f, 8f)
     drawPath(ground, p.ground)
     drawPath(ground, p.groundShade, alpha = 0.25f)
 
+    val strokeWidth = (proj.scaledTileHeight * 0.35f).coerceAtLeast(3f)
     for (segment in world.infrastructure.paths) {
-        drawLine(
+        drawStyledPath(
+            a = proj.project(segment.from),
+            b = proj.project(segment.to),
+            style = pathStyle,
             color = pathColor(segment.surface, p),
-            start = proj.project(segment.from),
-            end = proj.project(segment.to),
-            strokeWidth = (proj.scaledTileHeight * 0.35f).coerceAtLeast(3f),
-            cap = androidx.compose.ui.graphics.StrokeCap.Round,
+            strokeWidth = strokeWidth,
         )
     }
 }
+
+/**
+ * Renders a path segment in the user's chosen layout style (their permanent
+ * onboarding choice): geometric runs straight, winding bows on a curve, organic
+ * wanders through an offset midpoint.
+ */
+private fun DrawScope.drawStyledPath(
+    a: Offset,
+    b: Offset,
+    style: PathLayoutStyle,
+    color: Color,
+    strokeWidth: Float,
+) {
+    val cap = androidx.compose.ui.graphics.StrokeCap.Round
+    when (style) {
+        PathLayoutStyle.GEOMETRIC -> drawLine(color, a, b, strokeWidth, cap)
+        PathLayoutStyle.WINDING -> {
+            // Perpendicular control point produces a smooth bow.
+            val mid = Offset((a.x + b.x) / 2f, (a.y + b.y) / 2f)
+            val perp = Offset(-(b.y - a.y), b.x - a.x)
+            val len = kotlin.math.hypot(perp.x, perp.y).coerceAtLeast(0.001f)
+            val bow = (proj_dist(a, b) * 0.22f)
+            val ctrl = Offset(mid.x + perp.x / len * bow, mid.y + perp.y / len * bow)
+            val path = Path().apply {
+                moveTo(a.x, a.y)
+                quadraticBezierTo(ctrl.x, ctrl.y, b.x, b.y)
+            }
+            drawPath(path, color, style = androidx.compose.ui.graphics.drawscope.Stroke(strokeWidth, cap = cap))
+        }
+        PathLayoutStyle.ORGANIC -> {
+            // Two shorter legs through a slightly displaced midpoint.
+            val mid = Offset((a.x + b.x) / 2f, (a.y + b.y) / 2f)
+            val perp = Offset(-(b.y - a.y), b.x - a.x)
+            val len = kotlin.math.hypot(perp.x, perp.y).coerceAtLeast(0.001f)
+            val nudge = proj_dist(a, b) * 0.12f
+            val kink = Offset(mid.x + perp.x / len * nudge, mid.y + perp.y / len * nudge)
+            drawLine(color, a, kink, strokeWidth, cap)
+            drawLine(color, kink, b, strokeWidth, cap)
+        }
+    }
+}
+
+private fun proj_dist(a: Offset, b: Offset): Float = kotlin.math.hypot(b.x - a.x, b.y - a.y)
 
 private fun diamondPath(proj: IsoProjection, x: Float, y: Float, w: Float, h: Float): Path {
     val a = proj.project(coord(x, y))
@@ -148,7 +220,11 @@ fun DrawScope.drawStructures(
     for (dwelling in world.residential.dwellings) {
         val base = proj.project(dwelling.at)
         val w = proj.scaledTileWidth * dwellingScale(dwelling.tier)
-        drawBuilding(base, w, w * 0.9f, p.wall, p.roof, roofAlpha = 1f)
+        // The central hearth wears the user's permanent wood-grain & stonework.
+        val isHearth = dwelling.id == WorldState.HEARTH_DWELLING_ID
+        val wall = if (isHearth) p.hearthWood else p.wall
+        val roof = if (isHearth) p.hearthStone else p.roof
+        drawBuilding(base, w, w * 0.9f, wall, roof, roofAlpha = 1f)
     }
 
     for (wing in world.intellectualDistrict.wings) {
